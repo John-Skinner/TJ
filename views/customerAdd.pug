@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 Hello
+    p Enter a name for your group and click submit and we'll add you to the line.
+
+    form(action="/customer"
+    method="post")
+        label( for="id_groupName") Enter Group Name:
+        input(type="text"
+        name="groupname"
+        id="id_groupName"
+        )
+        input(type="number"
+        name="groupsize"
+        id="id_groupSize"
+        )
+        input(type="submit" value="Join Wait Line") 
