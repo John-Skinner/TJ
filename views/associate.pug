@@ -1,0 +1,18 @@
+extends layout
+
+block content
+    h1 Store Waiting Line Controls
+    form(action="/associate/openstore"
+    method="post")
+        label( for="id_capacity") Enter Store Capacity:
+        input(type="number"
+        name="capacity"
+        id="id_capacity"
+        min="5"
+        max="500"
+        value="60"
+        )
+        input(type="submit" value="Open Wait Line")
+
+
+

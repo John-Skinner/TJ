@@ -1,0 +1,62 @@
+extends layout
+block head
+    script(src='/public/associateFunctions.js')
+    script.
+        window.onload = () =>
+        {
+            console.log("Page loaded");
+            poll();
+        }
+block content
+
+    h1 Store Waiting Line Controls
+    h2
+        table
+            tr
+                td(align="right").
+                    Store Capacity
+                td(align="right").
+                    #{capacity}
+            tr
+                td(align="right").
+                    Individuals In Store
+                td(align="right")
+                    em(id='individualsInStore')
+    p
+    h2
+        table
+            tr
+                td(align="right").
+                    Number of Groups
+                td(align="right")
+                    em( id="podsInLine")
+            tr
+                td(align="right").
+                    Individuals in Line
+                td(align="right")
+                    em(id='individualsInLine')
+            tr
+                td(align="right").
+                    Next Group Name
+                td(align="right")
+                    em(id='nextPodName')
+            tr
+                td(align="right").
+                    Number in next Group
+                td(align="right")
+                    em(id='numberInNextPod')
+
+
+    p
+        button(id='left1',
+        onclick='individualsLeft()'
+        ) 1 Person Exited
+    p
+        button(id='left2',
+        onclick='individualsLeft()'
+        ) 2 Persons Exited
+    p
+        button(id='left3',
+        onclick='individualsLeft()'
+        ) 3 Persons Exited
+

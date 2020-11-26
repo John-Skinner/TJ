@@ -1,0 +1,28 @@
+extends layout
+
+block content
+    body
+        h1 Store Waiting Line Controls
+        l Enter Store Capacity:
+        input(type='number'
+        id='id_capacity'
+        name='capacity'
+        min='5'
+        max='500'
+        value='60'
+        )
+        p
+        input(type="button"
+        value="Open Waiting Line"
+        name='openstore'
+        )
+        script.
+            const capElement=Document.querySelector("#id_capacity");
+            const capValue = capElement.value;
+            var httpReq = new XMLHttpRequest();
+            httpReq.open("POST","/associate/openstore");
+            httpReq.send();
+
+
+
+
