@@ -8,7 +8,7 @@ block head
         }
 block content
     h1 Waiting
-    h2 Group name: #{groupname}
+    h2 Group name: #{groupName}
 
     h2
         table
@@ -16,17 +16,17 @@ block content
                 td(align="right").
                     Groups Ahead
                 td(align="right")
-                    em(id="groupsAhead") #{queueStats.pods_in_queue}
+                    em(id="groupsAhead") #{queueStats.groupsAhead}
             tr
                 td(align="right").
                     Individuals Ahead
                 td(align="right")
-                    em(id="individualsAhead") #{queueStats.customers_in_queue}
+                    em(id="individualsAhead") #{queueStats.individualsAhead}
             tr
                 td(align="right").
                     Estimated Wait Time
                 td(align="right")
-                    em(id="waitTime") #{queueStats.wait_time}
+                    em(id="waitTime") #{queueStats.waitTime}
         p
             button(id="mustLeave",
             onclick='leaveQueue()'

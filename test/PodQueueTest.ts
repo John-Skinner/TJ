@@ -29,11 +29,11 @@ describe('people queue tests',
     const queue = new PeopleQueue();
     it('uniquename',()=>
     {
-        let base = queue.alphaPortion("abc123");
-        expect(base).to.equal("abc");
+        let base = queue.alphaPortion("g1");
+        expect(base).to.equal("g");
         for (let i = 0;i < 50;i++)
         {
-            let podName="abc";
+            let podName="podpod";
             if (queue.getPositionFor(podName) === -1)
             {
                 let uPodName = queue.makeUniqueNameFrom(podName);
@@ -47,7 +47,7 @@ describe('people queue tests',
             }
         }
         expect(queue.queueLength()).equals(50);
-        let pos18 = queue.getPositionFor("abc19");
+        let pos18 = queue.getPositionFor("podpod19");
         expect(pos18).equals(18);
     });
         it('construction', () => {

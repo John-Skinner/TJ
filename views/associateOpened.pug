@@ -39,24 +39,33 @@ block content
                 td(align="right").
                     Next Group Name
                 td(align="right")
-                    em(id='nextPodName')
+                    em(id='nextPodName') None
             tr
                 td(align="right").
                     Number in next Group
                 td(align="right")
                     em(id='numberInNextPod')
+        table
+            tr
+                td(align="left")
+                    button(id='left1',
+                    onclick='individualsLeft(-1)') 1 Left
+                td(align='left')
+                    button(id='left2',
+                    onclick='individualsLeft(-2)') 2 Left
+                td(align='left')
+                    button(id='left3',
+                    onclick='individualsLeft(-3)') 3 Left
+                td(align='left')
+                    button(id='left4',
+                    onclick='individualsLeft(-4)') 4 Left
+                td(align='left')
+                    button(id='left5',
+                    onclick='individualsLeft(-5)') 5 Left
+        table
+            tr
+                td(align='left')
+                    button(id='allowNextGroup',
+                    onclick='allowNextGroup()') Allow Next Group In
 
-
-    p
-        button(id='left1',
-        onclick='individualsLeft()'
-        ) 1 Person Exited
-    p
-        button(id='left2',
-        onclick='individualsLeft()'
-        ) 2 Persons Exited
-    p
-        button(id='left3',
-        onclick='individualsLeft()'
-        ) 3 Persons Exited
 
