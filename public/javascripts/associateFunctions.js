@@ -15,7 +15,16 @@ function wsInit()
     {
         console.log(" message received");
         updatePage();
-    }
+    };
+    console.log('registering for event');
+    window.addEventListener('beforeunload',(e)=>
+    {
+        console.log(" about to leave");
+        e.preventDefault();
+        var confirm = "Warning, you are about to abandon monitoring the wait line.  Want to still leave the page?";
+        e.returnValue = confirm;
+        return confirm;
+    })
 }
 function updatePage() {
 
