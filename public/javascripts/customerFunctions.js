@@ -3,6 +3,59 @@ function poll()
     window.TJTimerId = setTimeout(timeToPoll,1000*2);
     window.TJTimeoutPending = true;
 }
+function wsCustomerInit(groupName)
+{
+    updateCustomerPage(); // explicitly ask for the first load.
+    const ws = new WebSocket('ws://localhost:3090');
+    ws.onopen = function()
+    {
+        console.log(' opened ws');
+        let message = groupName;
+        ws.send(message);
+    };
+    ws.onmessage = function()
+    {
+        console.log(" message received");
+        updateCustomerPage();
+    }
+}
+
+function updateCustomerPage()
+{
+
+        let getCurrentQueuePosReq = new XMLHttpRequest();
+        let groupNameElement=document.querySelector('#groupName');
+        let groupName = groupNameElement.innerHTML;
+        getCurrentQueuePosReq.open('get','/customer/checkonqueue/' + groupName,true);
+        getCurrentQueuePosReq.onload = function()
+        {
+            result = JSON.parse(getCurrentQueuePosReq.response);
+
+            let isInStore = result.waitTime >= 0;
+
+            let numAheadElement=document.querySelector("#groupsAhead");
+            let numAheadIndividualsElement = document.querySelector("#individualsAhead");
+            let waitTimeElement = document.querySelector("#waitTime");
+
+
+            if (isInStore)
+            {
+                numAheadElement.innerHTML = result.groupsAhead.toString();
+                numAheadIndividualsElement.innerHTML = result.individualsAhead.toString();
+                waitTimeElement.innerHTML = result.waitTime.toString() + " Minutes";
+            }
+            else
+            {
+                numAheadElement.innerHTML = "InStore";
+                numAheadIndividualsElement.innerHTML="In Store";
+                waitTimeElement.innerHTML = "0";
+            }
+
+        };
+        getCurrentQueuePosReq.send();
+
+}
+
 function timeToPoll()
 {
     if (window.TJTimeoutPending)

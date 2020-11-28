@@ -2,14 +2,17 @@ extends layout
 block head
     script(src='javascripts/customerFunctions.js')
     script.
+        window.TJGroupName = "";
         window.onload = ()=>
         {
-           poll();
+            let gn = '#{groupName}';
+            wsCustomerInit(gn);
+            console.log(" init customer monitor");
         }
 block content
     h1 Waiting
-    h2 Group name: #{groupName}
-
+    h2 Group name:
+        em(id='groupName') #{groupName}
     h2
         table
             tr
