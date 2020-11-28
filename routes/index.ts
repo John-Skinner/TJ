@@ -5,9 +5,13 @@ var router = express.Router();
 var tmpNumAhead = new NumAhead();
 const pug = require('pug');
 
-import {StoreGlobal, StoreQueueGlobal} from "../main/app"
+import {readyToCommunicate, StoreGlobal, StoreQueueGlobal, updateQueue} from "../main/app"
 import {Pod} from "../src/Pod";
 import {Store} from "../src/Store";
+
+function LineNotOpen(res: any) {
+    res.render('LineNotOpen');
+}
 
 
 router.get('/associate', (req: any, res: any) => {
@@ -16,7 +20,17 @@ router.get('/associate', (req: any, res: any) => {
 
 function buildQueueStats(group: string) {
     let nextPodName = "";
-    let pos = StoreQueueGlobal.getPositionFor(group);
+    let pos = 0;
+    if (group === '') {
+        pos = StoreQueueGlobal.queueLength() - 1;
+    } else {
+        pos = StoreQueueGlobal.getPositionFor(group);
+    }
+    let waitTime = 5;
+    if (pos === -1) {
+        waitTime = -1;
+    }
+
     let pod: Pod | undefined = StoreQueueGlobal.peekPod();
     StoreQueueGlobal.getInFrontOf(pos, tmpNumAhead);
     if (!(pod == undefined)) {
@@ -32,7 +46,7 @@ function buildQueueStats(group: string) {
         customersInNextPod: StoreQueueGlobal.numInNextPod(),
         podsInQueue: StoreQueueGlobal.queueLength(),
         podName: nextPodName,
-        waitTime: "5"
+        waitTime: waitTime
 
     };
     return queueStats;
@@ -57,6 +71,11 @@ router.post("/associate/openstore", (req: any, res: any) => {
 
 
 router.get('/', (req: any, res: any) => {
+    if (!readyToCommunicate) {
+        LineNotOpen(res);
+        return;
+    }
+
     console.log(" enter queue request");
     res.render('customerAdd');
 
@@ -79,6 +98,10 @@ router.post('/', function (req: any, res: any) {
     }
 });
 router.post('/customer', (req: any, res: any) => {
+    if (!readyToCommunicate) {
+        LineNotOpen(res);
+        return;
+    }
     let groupName = req.body.groupName;
     let numInGroup: number = parseInt(req.body.groupSize);
     console.log("add queue entry");
@@ -97,20 +120,33 @@ router.post('/customer', (req: any, res: any) => {
         queueStats: stats
     };
 
+//    let html = pug.renderFile('/Users/johnskinner/queueme/views/customerInQueue.pug',statsAndName);
+//    console.log(" html:" + html);
     res.render('customerInQueue', statsAndName);
     console.log(" customer add operation");
+
+    console.log(" schedule notify");
+    process.nextTick(() => {
+        updateQueue("everyone");
+    });
+
+
 });
 
 router.delete('/remove:name', function (req: any, res: any) {
     console.log("remove entry");
 });
-router.get('/associate/checkonqueue', (req: any, res: any) => {
-    let queueName = req.body.groupname;
-    let queueStats = buildQueueStats(queueName);
+router.get('/customer/checkonqueue/:groupName', (req: any, res: any) => {
+    let groupName = req.params.groupName;
+    let queueStats = buildQueueStats(groupName);
     let queueStatString = JSON.stringify(queueStats);
     res.send(queueStatString);
 });
-
+router.get('/associate/checkonqueue', (req: any, res: any) => {
+    let queueStats = buildQueueStats("");
+    let queueStatString = JSON.stringify(queueStats);
+    res.send(queueStatString);
+});
 module.exports = router;
 
 router.put('/associate/nextgroupin', (req: any, res: any) => {
@@ -122,6 +158,11 @@ router.put('/associate/nextgroupin', (req: any, res: any) => {
         let reply = buildQueueStats("fixme");
         let s = JSON.stringify(reply);
         res.send(s);
+        console.log(" schedule notify");
+        process.nextTick(() => {
+            updateQueue("everyone");
+        });
+
     }
 
 });
