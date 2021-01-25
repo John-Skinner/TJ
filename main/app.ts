@@ -44,7 +44,7 @@ var customerSockets: CustomerSocket[] = [];
 
 function InitServices() {
   associateWsServer = new WebSocket.Server({
-    port: 3080
+    port: 8080
   });
   associateWsServer.on('connection', (socket: any) => {
     associateConnection = socket;
@@ -57,7 +57,7 @@ function InitServices() {
     })
   });
   customerWsServer = new WebSocket.Server({
-    port: 3090
+    port: 8090
   });
   customerWsServer.on('connection',(socket: any) =>
   {
