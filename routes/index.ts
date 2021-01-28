@@ -120,8 +120,7 @@ router.post('/customer', (req: any, res: any) => {
         queueStats: stats
     };
 
-//    let html = pug.renderFile('/Users/johnskinner/queueme/views/customerInQueue.pug',statsAndName);
-//    console.log(" html:" + html);
+
     res.render('customerInQueue', statsAndName);
     console.log(" customer add operation");
 

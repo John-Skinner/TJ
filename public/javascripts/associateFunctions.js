@@ -5,7 +5,8 @@ function poll() {
 function wsInit()
 {
     updatePage(); // explicitly ask for the first load.
-    const ws = new WebSocket('ws://localhost:3080');
+
+    const ws = new WebSocket('ws://' + this.location.host + ':8080');
     ws.onopen = function()
     {
         console.log(' opened ws');
